@@ -1,0 +1,48 @@
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - pulsecare-network
+
+  backend:
+    build: ./server
+    container_name: pulsecare-backend
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/pulsecare
+      - JWT_SECRET=pulsecare-super-secret-key-2024
+      - PORT=4000
+      - CORS_ORIGINS=http://63.176.47.141:4173
+    depends_on:
+      - mongodb
+    networks:
+      - pulsecare-network
+
+  frontend:
+    build:
+      context: .
+      args:
+        - VITE_API_BASE_URL=http://63.176.47.141:4000/api
+    container_name: pulsecare-frontend
+    restart: always
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+    networks:
+      - pulsecare-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  pulsecare-network:
+    driver: bridge
