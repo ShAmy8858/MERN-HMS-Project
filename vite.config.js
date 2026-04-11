@@ -5,19 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://backend:4000',
-        changeOrigin: true,
-      }
+      '/api': { target: 'http://backend:4000', changeOrigin: true }
     }
   },
   preview: {
     proxy: {
-      '/api': {
-        target: 'http://backend:4000',
-        changeOrigin: true,
-      }
+      '/api': { target: 'http://backend:4000', changeOrigin: true }
     }
   }
 })
-
