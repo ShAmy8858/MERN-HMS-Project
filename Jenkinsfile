@@ -42,8 +42,10 @@ pipeline {
 
         stage('Deploy with Docker Compose') {
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d'
+                 sh 'docker stop mongodb pulsecare-backend pulsecare-frontend 2>/dev/null || true'
+       		 sh 'docker rm mongodb pulsecare-backend pulsecare-frontend 2>/dev/null || true'
+       		 sh 'docker-compose down || true'
+       		 sh 'docker-compose up -d'
             }
         }
     }
