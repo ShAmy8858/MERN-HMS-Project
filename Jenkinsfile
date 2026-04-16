@@ -1,57 +1,30 @@
 pipeline {
     agent any
 
-    environment {
-        BACKEND_IMAGE = 'shamoo8858/pulsecare-backend'
-        FRONTEND_IMAGE = 'shamoo8858/pulsecare-frontend'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
-                echo 'Cloning repository...'
+                echo 'Fetching latest code from GitHub...'
                 git branch: 'main', url: 'https://github.com/ShAmy8858/MERN-HMS-Project.git'
             }
         }
 
-        stage('Build Backend Image') {
+        stage('Build & Deploy with Docker') {
             steps {
-                sh "docker build -t ${BACKEND_IMAGE}:latest ./server"
-            }
-        }
-
-        stage('Build Frontend Image') {
-            steps {
-                sh "docker build -t ${FRONTEND_IMAGE}:latest ."
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-credentials',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh "docker push ${BACKEND_IMAGE}:latest"
-                    sh "docker push ${FRONTEND_IMAGE}:latest"
-                }
-            }
-        }
-
-        stage('Deploy with Docker Compose') {
-            steps {
-                 sh 'docker stop mongodb pulsecare-backend pulsecare-frontend 2>/dev/null || true'
-       		 sh 'docker rm mongodb pulsecare-backend pulsecare-frontend 2>/dev/null || true'
-       		 sh 'docker-compose down || true'
-       		 sh 'docker-compose up -d'
+                echo 'Stopping any existing CI containers...'
+                sh 'docker-compose -f docker-compose.dev.yml down || true'
+                echo 'Starting containerized build with volume-mounted code...'
+                sh 'docker-compose -f docker-compose.dev.yml up -d'
             }
         }
     }
 
     post {
-        success { echo 'Deployment successful!' }
-        failure { echo 'Pipeline failed!' }
+        success {
+            echo 'Pipeline successful! App is live on port 3000.'
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs above.'
+        }
     }
 }

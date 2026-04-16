@@ -1,0 +1,52 @@
+services:
+  mongodb-ci:
+    image: mongo:6.0
+    container_name: mongodb-ci
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_ci_data:/data/db
+    networks:
+      - ci-network
+
+  backend-ci:
+    image: node:18-alpine
+    container_name: pulsecare-backend-ci
+    working_dir: /app
+    command: sh -c "npm install && node src/index.js"
+    ports:
+      - "4001:4000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb-ci:27017/pulsecare_ci
+      - JWT_SECRET=pulsecare-ci-key-2024
+      - PORT=4000
+    volumes:
+      - ./server:/app
+    depends_on:
+      - mongodb-ci
+    networks:
+      - ci-network
+
+  frontend-ci:
+    image: node:18-alpine
+    container_name: pulsecare-frontend-ci
+    working_dir: /app
+    command: sh -c "npm install && npm run build && npm run preview -- --host 0.0.0.0 --port 3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - frontend_modules:/app/node_modules
+    depends_on:
+      - backend-ci
+    networks:
+      - ci-network
+
+volumes:
+  mongodb_ci_data:
+  frontend_modules:
+
+networks:
+  ci-network:
+    driver: bridge
