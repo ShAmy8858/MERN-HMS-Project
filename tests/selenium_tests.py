@@ -11,10 +11,10 @@ import os
 
 # --- Configuration ---
 BASE_URL = os.getenv("APP_URL", "http://3.121.29.68:3000")
-ADMIN_USER = "admin@gmail.com"  # Using default demo accounts usually found in MERN projects
-ADMIN_PASS = "admin123"
-STAFF_USER = "staff@gmail.com"
-STAFF_PASS = "staff123"
+ADMIN_USER = "admin@pulsecare.com"
+ADMIN_PASS = "Admin@123"
+STAFF_USER = "staff@pulsecare.com"
+STAFF_PASS = "Staff@123"
 
 @pytest.fixture(scope="module")
 def driver():
@@ -51,9 +51,9 @@ def test_03_invalid_login(driver):
     driver.find_element(By.NAME, "password").send_keys("wrongpass")
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
     
-    # Wait for error message
+    # Wait for error message (MUI Alert has role="alert")
     error_msg = WebDriverWait(driver, 5).until(
-        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'invalid') or contains(text(), 'Invalid')]"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "[role='alert']"))
     )
     assert error_msg.is_displayed()
 
@@ -93,7 +93,7 @@ def test_06_logout(driver):
 def test_07_signup_navigation(driver):
     """TC-07: Navigate to signup page"""
     driver.get(f"{BASE_URL}/login")
-    signup_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Sign Up") or driver.find_element(By.PARTIAL_LINK_TEXT, "Register")
+    signup_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Create an account")
     signup_link.click()
     assert "signup" in driver.current_url.lower() or "register" in driver.current_url.lower()
 
@@ -119,6 +119,8 @@ def test_09_staff_login_success(driver):
 def test_10_protected_route_redirect(driver):
     """TC-10: Attempt to access dashboard without login"""
     # First ensure we are logged out
+    driver.get(BASE_URL)
+    driver.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")
     driver.delete_all_cookies()
     driver.get(f"{BASE_URL}/dashboard")
     time.sleep(2)
