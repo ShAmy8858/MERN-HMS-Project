@@ -21,12 +21,15 @@ services:
       - MONGODB_URI=mongodb://mongodb-ci:27017/pulsecare_ci
       - JWT_SECRET=pulsecare-ci-key-2024
       - PORT=4000
+      - CORS_ORIGINS=http://frontend-ci:3000
     volumes:
       - ./server:/app
     depends_on:
       - mongodb-ci
     networks:
-      - ci-network
+      ci-network:
+        aliases:
+          - backend
 
   frontend-ci:
     image: node:18-alpine
