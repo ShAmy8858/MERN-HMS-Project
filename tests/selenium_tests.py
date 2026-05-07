@@ -119,7 +119,7 @@ def test_10_protected_route_redirect(driver):
     driver.get(BASE_URL)
     driver.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")
     driver.delete_all_cookies()
-    driver.get(f"{BASE_URL}/dashboard")
+    driver.get(f"{BASE_URL}/appointments")
     time.sleep(2)
     assert "login" in driver.current_url.lower()
 
