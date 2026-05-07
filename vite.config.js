@@ -9,6 +9,7 @@ export default defineConfig({
     }
   },
   preview: {
+    allowedHosts: true,
     proxy: {
       '/api': { target: 'http://backend:4000', changeOrigin: true }
     }
