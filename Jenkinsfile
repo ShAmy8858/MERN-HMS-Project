@@ -21,7 +21,7 @@ pipeline {
                 echo 'Starting containerized build with volume-mounted code...'
                 sh 'docker-compose -f docker-compose.dev.yml up -d'
                 echo 'Waiting for services to be ready...'
-                sleep 10
+                sleep 90
             }
         }
 
