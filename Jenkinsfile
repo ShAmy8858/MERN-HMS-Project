@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_URL = "http://63.176.47.141:3000"
+        APP_URL = "http://3.121.29.68:3000"
         DOCKER_IMAGE_TEST = "selenium-test-runner"
     }
 

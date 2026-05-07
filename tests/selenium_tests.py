@@ -11,7 +11,7 @@ import time
 import os
 
 # --- Configuration ---
-BASE_URL = os.getenv("APP_URL", "http://63.176.47.141:3000")
+BASE_URL = os.getenv("APP_URL", "http://3.121.29.68:3000")
 ADMIN_USER = "admin@gmail.com"  # Using default demo accounts usually found in MERN projects
 ADMIN_PASS = "admin123"
 STAFF_USER = "staff@gmail.com"
