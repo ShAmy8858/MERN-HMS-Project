@@ -31,7 +31,7 @@ pipeline {
                 sh 'docker build -t ${DOCKER_IMAGE_TEST} -f tests/Dockerfile.test tests/'
                 
                 echo 'Running Selenium Tests...'
-                # Run test container on the same network to access the app
+                // Run test container on the same network to access the app
                 sh "docker run --rm --network PulseCare-MERN-App_ci-network -e APP_URL=http://frontend-ci:3000 ${DOCKER_IMAGE_TEST}"
             }
         }
