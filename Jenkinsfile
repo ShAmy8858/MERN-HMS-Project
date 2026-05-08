@@ -49,7 +49,7 @@ pipeline {
                 subject: "SUCCESS: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
                 body: "Congratulations! The build and tests for ${env.JOB_NAME} #${env.BUILD_NUMBER} passed successfully.\n\nView results: ${env.BUILD_URL}",
                 recipientProviders: [developers(), requestor()],
-                to: "shamykhan8858@gmail.com",
+                to: "shamykhan8858@gmail.com, qasimalik@gmail.com",
                 from: "shamykhan3260@gmail.com"
             )
         }
@@ -59,7 +59,7 @@ pipeline {
                 subject: "FAILURE: Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
                 body: "Alert! The build or tests for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Please investigate the logs.\n\nLogs: ${env.BUILD_URL}console",
                 recipientProviders: [developers(), requestor()],
-                to: "shamykhan8858@gmail.com",
+                to: "shamykhan8858@gmail.com, qasimalik@gmail.com",
                 from: "shamykhan3260@gmail.com"
             )
         }
