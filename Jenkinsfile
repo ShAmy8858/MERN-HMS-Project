@@ -50,7 +50,7 @@ pipeline {
                 body: "Congratulations! The build and tests for ${env.JOB_NAME} #${env.BUILD_NUMBER} passed successfully.\n\nView results: ${env.BUILD_URL}",
                 recipientProviders: [developers(), requestor()],
                 to: "shamykhan8858@gmail.com",
-                //from: "jenkins-ci@example.com"
+                from: "shamykhan3260@gmail.com"
             )
         }
         failure {
@@ -60,7 +60,7 @@ pipeline {
                 body: "Alert! The build or tests for ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. Please investigate the logs.\n\nLogs: ${env.BUILD_URL}console",
                 recipientProviders: [developers(), requestor()],
                 to: "shamykhan8858@gmail.com",
-                //from: "jenkins-ci@example.com"
+                from: "shamykhan3260@gmail.com"
             )
         }
     }
